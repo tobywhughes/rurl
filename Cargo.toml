@@ -1,0 +1,8 @@
+[package]
+name = "rurl"
+version = "0.1.0"
+authors = ["tobywhughes <tobywhughes@gmail.com>"]
+
+[dependencies]
+
+hex = "0.2.0"
