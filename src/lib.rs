@@ -1,3 +1,5 @@
+#[macro_use] 
+extern crate lazy_static;
 
 pub mod parsing;
 
@@ -6,9 +8,9 @@ mod tests{
 	use parsing::encode;
 	#[test]
 	fn it_works(){
-
-		let x: String = encode::to_code('A');
+		let y = "http:\\\\www.google.com".to_string();
+		let x : String = encode::encode_url_string(y);
 		println!("------------------------------");
-		assert_eq!("65", x);
+		assert_eq!("http%3A%5C%5Cwww.google.com", x);
 	}
 }
