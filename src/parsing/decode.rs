@@ -1,12 +1,18 @@
 use parsing::hex::FromHex;
 
 pub fn decode_url_string(s: String) -> String{
-	let mut ret_string = String::from("");
+	let mut ret_string = "".to_string();
 	let mut percent_counter: u8 = 0;
-	let mut percent_string = String::from("");
+	let mut percent_string = "".to_string();
+
 	for c in s.chars(){
 		if c != '%' && percent_counter == 0{
-			ret_string.push(c);
+			if c != '+' {
+				ret_string.push(c);
+			} 
+			else{
+				ret_string.push(' ');
+			}
 		}
 		else if c == '%' {
 			percent_counter = 2;
@@ -22,7 +28,7 @@ pub fn decode_url_string(s: String) -> String{
 				let v: Vec<u8> = Vec::from_hex(percent_string).unwrap();
 				let s = String::from_utf8(v).unwrap();
 				ret_string.push_str(&s);
-				percent_string = String::from("");
+				percent_string = "".to_string();
 			}
 		}
 
