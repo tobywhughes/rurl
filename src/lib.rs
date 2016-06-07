@@ -47,8 +47,14 @@ mod tests{
 		assert_eq!(purl2.scheme, "");
 		assert_eq!(purl3.net_loc, "www.google.com");
 		assert_eq!(purl3.path, "/path/path");
-		assert_eq!(purl4.params, ";type=a");
-		assert_eq!(purl4.query, "?query");
-		assert_eq!(purl4.frag, "#fragment");	
+		assert_eq!(purl4.params, "type=a");
+		assert_eq!(purl4.query, "query");
+		assert_eq!(purl4.frag, "fragment");	
+
+		//Unparsing test
+		let unparsed1 : String = parse::url_join_parsed(purl2);
+		assert_eq!(unparsed1, "www.google.com");
+		let unparsed2 : String = parse::url_join_parsed(purl4);
+		assert_eq!(unparsed2, "http://www.google.com/path;type=a?query#fragment");
 	}
 }

@@ -25,6 +25,35 @@ pub fn url_parse(url : String) -> ParsedUrl{
 	purl
 }
 
+pub fn url_join_parsed(purl : ParsedUrl) -> String{
+	let mut url : String = "".to_string();
+
+	if purl.scheme.len() > 0 {
+		url.push_str(&purl.scheme);
+		url.push_str("://");
+	}
+
+	url.push_str(&purl.net_loc);
+	url.push_str(&purl.path);
+
+	if purl.params.len() > 0 {
+		url.push(';');
+		url.push_str(&purl.params);
+	}
+
+	if purl.query.len() > 0 {
+		url.push('?');
+		url.push_str(&purl.query);
+	}
+
+	if purl.frag.len() > 0 {
+		url.push('#');
+		url.push_str(&purl.frag);
+	}
+
+	url
+}
+
 fn get_scheme(url: &String) -> String {
 	let mut scheme_string: String = "".to_string();
 	let mut col_flag : bool = false;
@@ -124,7 +153,6 @@ fn get_params(url : &String) -> String {
 		if param_flag == false {
 			if c == ';'{
 				param_flag = true;
-				param_string.push(c);
 			}
 		}
 		else {
@@ -152,7 +180,6 @@ fn get_query(url : &String) -> String {
 		if query_flag == false {
 			if c == '?'{
 				query_flag = true;
-				query_string.push(c);
 			}
 		}
 		else {
@@ -180,7 +207,6 @@ fn get_frag(url : &String) -> String {
 		if frag_flag == false {
 			if c == '#'{
 				frag_flag = true;
-				frag_string.push(c);
 			}
 		}
 		else {
