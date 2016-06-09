@@ -23,6 +23,7 @@ mod tests{
 		enc_url = decode::decode_url_string(enc_url);
 		assert_eq!("http://www.google.com/path;type=a?query#fragment", enc_url);
 
+
 		//Spaces
 		let space_test = "asdf asdf".to_string();
 		let mut enc_space : String = encode::encode_url_string(space_test);

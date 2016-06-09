@@ -1,5 +1,14 @@
 use parsing::regex::Regex;
 
+/// Parses URL according to RC-1808. Parses into ParsedUrl Struct type.
+///
+/// # Examples
+///
+/// ```
+/// use rurl::parsing::parse;
+///
+/// let variable : parse::ParsedUrl = parse::url_parse("scheme://web.site.com/path;params?query#fragment".to_string());
+/// ```
 pub fn url_parse(url : String) -> ParsedUrl{
 	let mut purl = ParsedUrl {scheme: "".to_string(), net_loc:"".to_string(), path: "".to_string(), 
 							  params: "".to_string(), query: "".to_string(), frag: "".to_string()};
@@ -25,9 +34,22 @@ pub fn url_parse(url : String) -> ParsedUrl{
 	purl
 }
 
+
+/// Takes a ParsedUrl Struct and joins it into a string
+///
+/// # Examples
+///
+/// ```
+/// use rurl::parsing::parse;
+///
+/// let variable : parse::ParsedUrl = parse::url_parse("scheme://web.site.com/path;params?query#fragment".to_string());
+///
+///	let url : String = parse::url_join_parsed(variable); 
+/// ```
 pub fn url_join_parsed(purl : ParsedUrl) -> String{
 	let mut url : String = "".to_string();
 
+	//If no scheme, does not add ://
 	if purl.scheme.len() > 0 {
 		url.push_str(&purl.scheme);
 		url.push_str("://");
@@ -35,6 +57,8 @@ pub fn url_join_parsed(purl : ParsedUrl) -> String{
 
 	url.push_str(&purl.net_loc);
 	url.push_str(&purl.path);
+
+	//Checks params, query, and frag for content before adding the ; or ? or #
 
 	if purl.params.len() > 0 {
 		url.push(';');
@@ -237,6 +261,8 @@ fn cut_start(url : &String, mut del_len : usize) -> String{
 	cut_string
 }
 
+/// Struct defined by RFC 1808 Standard
+/// Currently does not hold a nuanced view of the net location (//<user>:<password>@<host>:>port>) - RFC 1738
 pub struct ParsedUrl {
 	pub scheme: String,
 	pub net_loc: String,

@@ -1,6 +1,15 @@
 use parsing::hex::ToHex;
 use parsing::regex::Regex;
 
+/// Percent-encodes a URL string
+///
+/// #Example
+/// ```
+/// use rurl::parsing::encode;
+/// let mut enc_url : String= "http://www.google.com".to_string();
+/// 
+/// enc_url = encode::encode_url_string(enc_url);
+/// ```
 pub fn encode_url_string(s: String) -> String{
 	let mut ret_string = "".to_string();
 
@@ -13,6 +22,7 @@ pub fn encode_url_string(s: String) -> String{
 		if RE.is_match(&c.to_string()){
 			ret_string.push(c);
 		}
+		//Handles spaces which are encoded, but not percent-encoded
 		else if c == ' '{
 			ret_string.push('+');
 		}
