@@ -63,8 +63,13 @@ mod tests{
 		let surl = parse::url_split(surl_string);
 		assert_eq!(surl.scheme,"http");
 		assert_eq!(surl.net_loc,"www.google.com");
-		assert_eq!(surl.path, "/path?type=a");
+		assert_eq!(surl.path, "/path;type=a");
 		assert_eq!(surl.query, "query");
 		assert_eq!(surl.frag, "fragment");
+		
+		//Unsplit test
+		let unsplit : String = parse::url_join_split(surl);
+		assert_eq!(unsplit, "http://www.google.com/path;type=a?query#fragment")
+
 	}
 }

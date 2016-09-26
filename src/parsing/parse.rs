@@ -34,9 +34,21 @@ pub fn url_parse(url : String) -> ParsedUrl{
 	purl
 }
 
+/// Parses URL similar to url_parse() however the path and the params are kept together
+///
+/// # Examples
+/// ```
+/// use rurl::parsing::parse;
+///
+/// let variable : parse::SplitUrl = parse::url_split("scheme://web.site.com/path;params?query#fragment".to_string());
+/// ```
 pub fn url_split(url : String) -> SplitUrl{
 	let parsed : ParsedUrl = url_parse(url.to_string());
-	let augmented_path = parsed.path + "?" + &parsed.params;
+	let mut augmented_path : String = parsed.path;
+	if parsed.params.len() > 0 {
+		augmented_path.push(';');
+		augmented_path.push_str(&parsed.params);
+	}
 	SplitUrl {scheme: parsed.scheme, net_loc: parsed.net_loc, path: augmented_path, query: parsed.query, frag: parsed.frag}
 }
 
@@ -50,7 +62,7 @@ pub fn url_split(url : String) -> SplitUrl{
 ///
 /// let variable : parse::ParsedUrl = parse::url_parse("scheme://web.site.com/path;params?query#fragment".to_string());
 ///
-///	let url : String = parse::url_join_parsed(variable); 
+/// let url : String = parse::url_join_parsed(variable); 
 /// ```
 pub fn url_join_parsed(purl : ParsedUrl) -> String{
 	let mut url : String = "".to_string();
@@ -79,6 +91,41 @@ pub fn url_join_parsed(purl : ParsedUrl) -> String{
 	if purl.frag.len() > 0 {
 		url.push('#');
 		url.push_str(&purl.frag);
+	}
+
+	url
+}
+
+/// Takes a SplitUrl Struct and joins it into a string
+///
+/// # Examples
+///
+/// ```
+/// use rurl::parsing::parse;
+///
+/// let variable : parse::SplitUrl = parse::url_split("scheme://web.site.com/path;params?query#fragment".to_string());
+///
+/// let url : String = parse::url_join_split(variable); 
+/// ```
+pub fn url_join_split(surl : SplitUrl) -> String {
+	let mut url : String = "".to_string();
+	
+	if surl.scheme.len() > 0 {
+		url.push_str(&surl.scheme);
+		url.push_str("://");
+	}
+
+	url.push_str(&surl.net_loc);
+	url.push_str(&surl.path);
+
+	if surl.query.len() > 0 {
+		url.push('?');
+		url.push_str(&surl.query);
+	}
+
+	if surl.frag.len() > 0 {
+		url.push('#');
+		url.push_str(&surl.frag);
 	}
 
 	url
@@ -278,6 +325,8 @@ pub struct ParsedUrl {
 	pub frag: String,
 }
 
+/// Struct defined by RFC 1808 Standard - Path and params are one item
+/// Currently does not hold a nuanced view of the net location (//<user>:<password>@<host>:>port>) - RFC 1738
 pub struct SplitUrl {
 	pub scheme: String,
 	pub net_loc: String,
