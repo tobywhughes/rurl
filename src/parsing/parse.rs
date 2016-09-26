@@ -34,6 +34,12 @@ pub fn url_parse(url : String) -> ParsedUrl{
 	purl
 }
 
+pub fn url_split(url : String) -> SplitUrl{
+	let parsed : ParsedUrl = url_parse(url.to_string());
+	let augmented_path = parsed.path + "?" + &parsed.params;
+	SplitUrl {scheme: parsed.scheme, net_loc: parsed.net_loc, path: augmented_path, query: parsed.query, frag: parsed.frag}
+}
+
 
 /// Takes a ParsedUrl Struct and joins it into a string
 ///
@@ -268,6 +274,14 @@ pub struct ParsedUrl {
 	pub net_loc: String,
 	pub path: String,
 	pub params: String,
+	pub query: String,
+	pub frag: String,
+}
+
+pub struct SplitUrl {
+	pub scheme: String,
+	pub net_loc: String,
+	pub path: String,
 	pub query: String,
 	pub frag: String,
 }

@@ -56,6 +56,15 @@ mod tests{
 		let unparsed1 : String = parse::url_join_parsed(purl2);
 		assert_eq!(unparsed1, "www.google.com");
 		let unparsed2 : String = parse::url_join_parsed(purl4);
-		assert_eq!(unparsed2, "http://www.google.com/path;type=a?query#fragment");
+		assert_eq!(unparsed2, "http://www.google.com/path;type=a?query#fragment");		
+
+		//Split Ttest
+		let surl_string : String = String::from("http://www.google.com/path;type=a?query#fragment");
+		let surl = parse::url_split(surl_string);
+		assert_eq!(surl.scheme,"http");
+		assert_eq!(surl.net_loc,"www.google.com");
+		assert_eq!(surl.path, "/path?type=a");
+		assert_eq!(surl.query, "query");
+		assert_eq!(surl.frag, "fragment");
 	}
 }
